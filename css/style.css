@@ -12,3 +12,12 @@ td {
 .player {
     background-color: blue;
 }
+.rock {
+    background-color: rgb(221, 96, 96);
+}
+.obstacle {
+    background-color: rgb(207, 132, 34);
+}
+.bomb {
+    background-color: rgb(0, 247, 255);
+}
