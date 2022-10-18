@@ -43,6 +43,7 @@ var player = {
   }
 };
 
+
 var enemy = {
   x: 5,
   y: 10,
@@ -76,7 +77,6 @@ var enemy = {
   }
 }
 
-
 var game = {
   createBoard() {
     // Selecciona la tabla vacía del html y la construye en el js a semejanza del mapa dibujado (boundMap)
@@ -101,12 +101,18 @@ var game = {
       table.appendChild(tr);
     });
   player.showPlayer()
+
   enemy.showEnemy()
   
  
   },
 
   collisionCheck(direction, ame, type) {
+
+  },
+
+  collisionCheck(direction) {
+
 
     switch(direction) {
   
@@ -151,6 +157,7 @@ var game = {
     
       switch (e.key) {
         case "w":
+
           if (!this.collisionCheck("w")) {
             player.y --;
             player.direction = 'w'}
@@ -190,12 +197,29 @@ var game = {
       player.removePlayer();
       alert('GAME OVER >:D');
     }
+
+          if (!this.collisionCheck("w")) {player.y --;}
+          break;
+        case "a":
+          if (!this.collisionCheck("a")) {player.x --;}
+          break;
+        case "s":
+          if (!this.collisionCheck("s")) {player.y ++;}
+          break;
+        case "d":
+          if (!this.collisionCheck("d")) {player.x ++;}
+          break;
+      }
+      player.showPlayer()
+    });
+
   }
 }
 
 /*************************************************************
  CREACIÓN DEL ENTORNO
 **************************************************************/
+
 
 game.createBoard()
 
@@ -206,4 +230,11 @@ game.createBoard()
 game.movePlayer()
 enemy.moveEnemy()
 
+game.createBoard()
 
+
+/*************************************************************
+ MOVIMIENTO DEL JUGADOR
+**************************************************************/
+
+game.movePlayer()
