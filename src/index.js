@@ -29,33 +29,36 @@ let boundMap = [
 ];
 
 var bomb = {
+  x: 0,
+  y: 0,
+  self: this,
   range: 1,
   timer: 2500,
   showBomb() {
         var bombCell = document.querySelector(`#row${player.y} #col${player.x}`);
         bombCell.classList.add("bomb");
-        bombCell.classList.add('player');
+        self.x = player.x;
+        self.y = player.y;
     },
-    removeBomb() {
-      var bombCell = document.querySelector(`#row${player.y} #col${player.x}`)
-      bombCell.classList.remove("bomb");
+  removeBomb() {
+      console.log(this.x)
+      console.log(this.y)
+      setTimeout(function() {
+        var bombCell = document.querySelector(`#row${self.y} #col${self.x}`)
+        console.log(bombCell);
+        bombCell.classList.remove("bomb");
+      }, this.timer) 
     },
   explodeBomb() {
-
+    console.log(this.x)
+    console.log(this.y)
     let explodeCells = [];
-      for(let i = player.y - this.range; i < player.y; i++ ) {
+      for(let i = player.y - this.range; i <= player.y + this.range; i++ ) {
         explodeCells.push({x: player.x, y: i})
       }
-      for(let i = player.y + 1; i <= player.y + this.range; i++ ) {
-        explodeCells.push({x: player.x, y: i})
-      }
-      for(let i = player.x - this.range; i < player.x; i++ ) {
+      for(let i = player.x - this.range; i <= player.x + this.range; i++ ) {
         explodeCells.push({x: i, y: player.y})
       }
-      for(let i = player.x + 1; i <= player.x + this.range; i++ ) {
-        explodeCells.push({x: i, y: player.y})
-      }
-      console.log(explodeCells);
 
       setTimeout(function() {
         explodeCells.forEach((e) => {
@@ -67,12 +70,11 @@ var bomb = {
               player.health--
             }
         })
-        bomb.removeBomb()
       }, this.timer)
   },
 }
-  
 
+console.log(bomb.x)
 
 var player = {
   x: 2,
@@ -108,7 +110,7 @@ var player = {
 
 var enemy = {
   x: 5,
-  y: 10,
+  y: 15,
   direction: 1,
   showEnemy() {
     var enemyCell = document.querySelector(`#row${this.y} #col${this.x}`);
@@ -121,7 +123,6 @@ var enemy = {
   attack() {  //Check Daños
     if (player.x === this.x && player.y === this.y) {
       player.health--
-      console.log(player.health)
       game.gameOver()
       if(this.direction === 1) {
         this.removeEnemy()
@@ -244,7 +245,6 @@ var game = {
             player.direction = 'd'}
           break;
       }
-
       player.showPlayer()
       enemy.attack()
     });
@@ -262,6 +262,7 @@ var game = {
       if (e.code === 'Space') {
         bomb.showBomb()
         bomb.explodeBomb()
+        bomb.removeBomb()
       }
     })
   }
@@ -281,5 +282,3 @@ game.movePlayer()
 enemy.moveEnemy()
 
 game.generateBomb()
-
-

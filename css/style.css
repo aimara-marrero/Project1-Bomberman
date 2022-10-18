@@ -4,7 +4,7 @@ body {
 td {
     width: 30px;
     height:30px;
-    background-color: aquamarine;
+    background-color: rgb(42, 79, 67);
 }
 .boundary {
     background-color: brown;
