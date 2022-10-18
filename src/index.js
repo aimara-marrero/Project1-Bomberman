@@ -5,7 +5,7 @@
 let boundMap = [
   ['=', '=', '=', '=', '=',   '=', '=', '=', '=', '=',   '=', '=', '=', '=', '=',   '=', '=', '=', '=', '='], 
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='], 
-  ['=', ' ', '*', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='], 
+  ['=', ' ', '-', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='], 
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='], 
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
   
@@ -22,11 +22,57 @@ let boundMap = [
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
   
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
-  ['=', ' ', ' ', ' ', '-',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
+  ['=', ' ', ' ', '*', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
   ['=', '=', '=', '=', '=',   '=', '=', '=', '=', '=',   '=', '=', '=', '=', '=',   '=', '=', '=', '=', '=']
 ];
+
+var bomb = {
+  range: 1,
+  timer: 2500,
+  showBomb() {
+        var bombCell = document.querySelector(`#row${player.y} #col${player.x}`);
+        bombCell.classList.add("bomb");
+        bombCell.classList.add('player');
+    },
+    removeBomb() {
+      var bombCell = document.querySelector(`#row${player.y} #col${player.x}`)
+      bombCell.classList.remove("bomb");
+    },
+  explodeBomb() {
+
+    let explodeCells = [];
+      for(let i = player.y - this.range; i < player.y; i++ ) {
+        explodeCells.push({x: player.x, y: i})
+      }
+      for(let i = player.y + 1; i <= player.y + this.range; i++ ) {
+        explodeCells.push({x: player.x, y: i})
+      }
+      for(let i = player.x - this.range; i < player.x; i++ ) {
+        explodeCells.push({x: i, y: player.y})
+      }
+      for(let i = player.x + 1; i <= player.x + this.range; i++ ) {
+        explodeCells.push({x: i, y: player.y})
+      }
+      console.log(explodeCells);
+
+      setTimeout(function() {
+        explodeCells.forEach((e) => {
+          let explodeCell =  document.querySelector(`#row${e.y} #col${e.x}`)
+          let attr = explodeCell.getAttribute('class')
+            if(attr === 'enemy' || attr === 'obstacle') {
+              explodeCell.classList.remove(attr)
+            } else if (attr === 'player') {
+              player.health--
+            }
+        })
+        bomb.removeBomb()
+      }, this.timer)
+  },
+}
+  
+
 
 var player = {
   x: 2,
@@ -40,8 +86,25 @@ var player = {
   removePlayer() {
     var playerCell = document.querySelector(`#row${this.y} #col${this.x}`);
     playerCell.classList.remove("player");
-  }
-};
+  },
+  /*receiveDamage() {
+    if (this.x === enemy.x && this.y === enemy.y) {
+    player.health--;
+    console.log(player.health)
+    switch(player.direction){
+      case 'w' : player.y++
+      break
+      case 'a' : player.x++;
+      break;
+      case 's' : player.y--;
+      break;
+      case 'd' : player.x--;
+      break;
+    }
+    game.gameOver()
+    } 
+  }*/
+}
 
 var enemy = {
   x: 5,
@@ -55,12 +118,20 @@ var enemy = {
     var enemyCell = document.querySelector(`#row${this.y} #col${this.x}`);
     enemyCell.classList.remove("enemy");
   },
-  attack() {
+  attack() {  //Check Daños
     if (player.x === this.x && player.y === this.y) {
       player.health--
       console.log(player.health)
-      player.showPlayer()
       game.gameOver()
+      if(this.direction === 1) {
+        this.removeEnemy()
+        this.y--
+        this.showEnemy()
+      } else if (this.direction === -1) {
+        this.removeEnemy()
+        this.y++
+        this.showEnemy()
+      }
     }
   },
   moveEnemy() {
@@ -72,7 +143,7 @@ var enemy = {
       enemy.y += enemy.direction;
       enemy.showEnemy()
       enemy.attack()
-    } , 500)
+    } , 50000)
   }
 }
 
@@ -102,11 +173,9 @@ var game = {
     });
   player.showPlayer()
   enemy.showEnemy()
-  
- 
   },
 
-  collisionCheck(direction, ame, type) {
+  collisionCheck(direction) {
 
     switch(direction) {
   
@@ -115,7 +184,8 @@ var game = {
         let cellW = document.querySelector(`#row${player.y - 1} #col${player.x}`);
         if (cellW.getAttribute("class") === "rock" ||
             cellW.getAttribute("class") === "boundary" ||
-            cellW.getAttribute("class") === "obstacle") {
+            cellW.getAttribute("class") === "obstacle" ||
+            cellW.getAttribute("class") === "bomb") {
           return true;
         } return false;
       
@@ -123,7 +193,8 @@ var game = {
         let cellA = document.querySelector(`#row${player.y} #col${player.x - 1}`);
         if (cellA.getAttribute("class") === "rock" ||
             cellA.getAttribute("class") === "boundary" ||
-            cellA.getAttribute("class") === "obstacle") {
+            cellA.getAttribute("class") === "obstacle" ||
+            cellA.getAttribute("class") === "bomb") {
         return true;
       } return false;
       
@@ -131,7 +202,8 @@ var game = {
           let cellS = document.querySelector(`#row${player.y + 1} #col${player.x}`);
         if (cellS.getAttribute("class") === "rock" ||
             cellS.getAttribute("class") === "boundary" ||
-            cellS.getAttribute("class") === "obstacle") {
+            cellS.getAttribute("class") === "obstacle" ||
+            cellS.getAttribute("class") === "bomb") {
         return true;
       } return false;
   
@@ -139,7 +211,8 @@ var game = {
         let cellD = document.querySelector(`#row${player.y} #col${player.x + 1}`);
         if (cellD.getAttribute("class") === "rock" ||
             cellD.getAttribute("class") === "boundary" ||
-            cellD.getAttribute("class") === "obstacle") {
+            cellD.getAttribute("class") === "obstacle" ||
+            cellD.getAttribute("class") === "bomb") {
         return true;
       } return false;      
     }
@@ -171,16 +244,7 @@ var game = {
             player.direction = 'd'}
           break;
       }
-      /*   switch(player.direction){
-        case 'w' : player.y++
-        break
-        case 'a' : player.x++;
-        break;
-        case 's' : player.y--;
-        break;
-        case 'd' : player.x--;
-        break;
-      } */
+
       player.showPlayer()
       enemy.attack()
     });
@@ -189,7 +253,17 @@ var game = {
     if(player.health === 0) {
       player.removePlayer();
       alert('GAME OVER >:D');
+      player.health = 3 // Hay que hacer el reseteo
+
     }
+  },
+  generateBomb() {
+    window.addEventListener("keydown", (e) => {
+      if (e.code === 'Space') {
+        bomb.showBomb()
+        bomb.explodeBomb()
+      }
+    })
   }
 }
 
@@ -205,5 +279,7 @@ game.createBoard()
 
 game.movePlayer()
 enemy.moveEnemy()
+
+game.generateBomb()
 
 
