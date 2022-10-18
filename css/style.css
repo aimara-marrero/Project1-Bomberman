@@ -25,4 +25,7 @@ td {
 .enemy {
     background-color: green
     }
+.goal {
+    background-color: rgb(235, 100, 199);
+}
 

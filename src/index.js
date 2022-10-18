@@ -4,7 +4,7 @@
 
 let boundMap = [
   ['=', '=', '=', '=', '=',   '=', '=', '=', '=', '=',   '=', '=', '=', '=', '=',   '=', '=', '=', '=', '='], 
-  ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='], 
+  ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', '+', '='], 
   ['=', ' ', '-', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='], 
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='], 
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
@@ -16,23 +16,32 @@ let boundMap = [
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
 
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
-  ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
+  ['=', ' ', ' ', ' ', ' ',   '-', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
   
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
-  ['=', ' ', ' ', '*', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
+  ['=', ' ', ' ', ' ', ' ',   '*', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
   ['=', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', ' ',   ' ', ' ', ' ', ' ', '='],
   ['=', '=', '=', '=', '=',   '=', '=', '=', '=', '=',   '=', '=', '=', '=', '=',   '=', '=', '=', '=', '=']
 ];
+
+var goal = {
+  x: 18,
+  y: 1,
+  showGoal() {
+    var goalCell = document.querySelector(`#row${goal.y} #col${goal.x}`);
+    goalCell.classList.add("goal");
+  }
+}
 
 var bomb = {
   x: 0,
   y: 0,
   self: this,
-  range: 1,
+  range: 2,
   timer: 2500,
   showBomb() {
         var bombCell = document.querySelector(`#row${player.y} #col${player.x}`);
@@ -50,8 +59,6 @@ var bomb = {
       }, this.timer) 
     },
   explodeBomb() {
-    console.log(this.x)
-    console.log(this.y)
     let explodeCells = [];
       for(let i = player.y - this.range; i <= player.y + this.range; i++ ) {
         explodeCells.push({x: player.x, y: i})
@@ -74,7 +81,6 @@ var bomb = {
   },
 }
 
-console.log(bomb.x)
 
 var player = {
   x: 2,
@@ -89,7 +95,7 @@ var player = {
     var playerCell = document.querySelector(`#row${this.y} #col${this.x}`);
     playerCell.classList.remove("player");
   },
-  /*receiveDamage() {
+  receiveDamage() {
     if (this.x === enemy.x && this.y === enemy.y) {
     player.health--;
     console.log(player.health)
@@ -105,13 +111,15 @@ var player = {
     }
     game.gameOver()
     } 
-  }*/
+  }
 }
 
 
 var enemy = {
   x: 5,
   y: 15,
+  self: this,
+  speed: 500,
   direction: 1,
   showEnemy() {
     var enemyCell = document.querySelector(`#row${this.y} #col${this.x}`);
@@ -121,7 +129,7 @@ var enemy = {
     var enemyCell = document.querySelector(`#row${this.y} #col${this.x}`);
     enemyCell.classList.remove("enemy");
   },
-  attack() {  //Check Daños
+  /*())() {  //Check Daños
     if (player.x === this.x && player.y === this.y) {
       player.health--
       game.gameOver()
@@ -135,17 +143,22 @@ var enemy = {
         this.showEnemy()
       }
     }
-  },
+  },*/
   moveEnemy() {
     var timerId = setInterval(function() {
-      if(enemy.y === 1 || enemy.y === 18) {
+      /*console.log(self.y)
+      console.log(self.direction)
+     // var nextCell = document.querySelector(`#row${this.y} #col${this.x}`)
+      //console.log(nextCell)
+//      let attr = nextCell.getAttribute('class') */ 
+      if(enemy.y === 1 || enemy.y === 18 || attr === 'rock' || attr === 'obstacle' || attr === 'bomb') {
         enemy.direction *= -1;
       }
       enemy.removeEnemy()
       enemy.y += enemy.direction;
       enemy.showEnemy()
-      enemy.attack()
-    } , 50000)
+      player.receiveDamage()
+    } , this.speed)
   }
 }
 
@@ -173,8 +186,8 @@ var game = {
       table.appendChild(tr);
     });
   player.showPlayer()
-
   enemy.showEnemy()
+  goal.showGoal()
   },
 
   collisionCheck(direction) {
@@ -253,7 +266,8 @@ var game = {
           break;
       }
       player.showPlayer()
-      enemy.attack()
+      player.receiveDamage()
+      game.win()
     });
   },
   gameOver() {
@@ -261,7 +275,11 @@ var game = {
       player.removePlayer();
       alert('GAME OVER >:D');
       player.health = 3 // Hay que hacer el reseteo
-
+    }
+  },
+  win() {
+    if(player.x === goal.x && player.y === goal.y) {
+      alert('YOU WIN!!');
     }
   },
   generateBomb() {
