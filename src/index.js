@@ -108,6 +108,7 @@ var player = {
   }*/
 }
 
+
 var enemy = {
   x: 5,
   y: 15,
@@ -148,7 +149,6 @@ var enemy = {
   }
 }
 
-
 var game = {
   createBoard() {
     // Selecciona la tabla vacía del html y la construye en el js a semejanza del mapa dibujado (boundMap)
@@ -173,10 +173,16 @@ var game = {
       table.appendChild(tr);
     });
   player.showPlayer()
+
   enemy.showEnemy()
   },
 
   collisionCheck(direction) {
+
+  },
+
+  collisionCheck(direction) {
+
 
     switch(direction) {
   
@@ -225,6 +231,7 @@ var game = {
     
       switch (e.key) {
         case "w":
+
           if (!this.collisionCheck("w")) {
             player.y --;
             player.direction = 'w'}
@@ -271,6 +278,7 @@ var game = {
 /*************************************************************
  CREACIÓN DEL ENTORNO
 **************************************************************/
+
 
 game.createBoard()
 
