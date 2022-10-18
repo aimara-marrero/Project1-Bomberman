@@ -31,6 +31,8 @@ let boundMap = [
 var player = {
   x: 2,
   y: 17,
+  direction: '',
+  health: 3,
   showPlayer() {
     var playerCell = document.querySelector(`#row${this.y} #col${this.x}`);
     playerCell.classList.add("player");
@@ -40,6 +42,40 @@ var player = {
     playerCell.classList.remove("player");
   }
 };
+
+
+var enemy = {
+  x: 5,
+  y: 10,
+  direction: 1,
+  showEnemy() {
+    var enemyCell = document.querySelector(`#row${this.y} #col${this.x}`);
+    enemyCell.classList.add("enemy");
+  },
+  removeEnemy() {
+    var enemyCell = document.querySelector(`#row${this.y} #col${this.x}`);
+    enemyCell.classList.remove("enemy");
+  },
+  attack() {
+    if (player.x === this.x && player.y === this.y) {
+      player.health--
+      console.log(player.health)
+      player.showPlayer()
+      game.gameOver()
+    }
+  },
+  moveEnemy() {
+    var timerId = setInterval(function() {
+      if(enemy.y === 1 || enemy.y === 18) {
+        enemy.direction *= -1;
+      }
+      enemy.removeEnemy()
+      enemy.y += enemy.direction;
+      enemy.showEnemy()
+      enemy.attack()
+    } , 500)
+  }
+}
 
 var game = {
   createBoard() {
@@ -65,9 +101,18 @@ var game = {
       table.appendChild(tr);
     });
   player.showPlayer()
+
+  enemy.showEnemy()
+  
+ 
+  },
+
+  collisionCheck(direction, ame, type) {
+
   },
 
   collisionCheck(direction) {
+
 
     switch(direction) {
   
@@ -112,6 +157,47 @@ var game = {
     
       switch (e.key) {
         case "w":
+
+          if (!this.collisionCheck("w")) {
+            player.y --;
+            player.direction = 'w'}
+          break;
+        case "a":
+          if (!this.collisionCheck("a")) {
+            player.x --;
+            player.direction = 'a'}
+          break;
+        case "s":
+          if (!this.collisionCheck("s")) {
+            player.y ++;
+            player.direction = 's'}
+          break;
+        case "d":
+          if (!this.collisionCheck("d")) {
+            player.x ++;
+            player.direction = 'd'}
+          break;
+      }
+      /*   switch(player.direction){
+        case 'w' : player.y++
+        break
+        case 'a' : player.x++;
+        break;
+        case 's' : player.y--;
+        break;
+        case 'd' : player.x--;
+        break;
+      } */
+      player.showPlayer()
+      enemy.attack()
+    });
+  },
+  gameOver() {
+    if(player.health === 0) {
+      player.removePlayer();
+      alert('GAME OVER >:D');
+    }
+
           if (!this.collisionCheck("w")) {player.y --;}
           break;
         case "a":
@@ -126,6 +212,7 @@ var game = {
       }
       player.showPlayer()
     });
+
   }
 }
 
@@ -133,7 +220,18 @@ var game = {
  CREACIÓN DEL ENTORNO
 **************************************************************/
 
+
 game.createBoard()
+
+/*************************************************************
+ MOVIMIENTO DEL JUGADOR
+**************************************************************/
+
+game.movePlayer()
+enemy.moveEnemy()
+
+game.createBoard()
+
 
 /*************************************************************
  MOVIMIENTO DEL JUGADOR
