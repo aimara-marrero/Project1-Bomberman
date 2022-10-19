@@ -1,29 +1,139 @@
 
+
 body {
+    margin-top: 50px;
     background-color: rgb(0, 0, 0);
+    position: relative;
+}
+#start {
+    display: block;
+    width: 630px;
+    height: 630px;
+    background-image: url(/images/StartScreen.png);
+    background-size: cover;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+#start button {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background: hsl(10, 75%, 50%);
+    height: 50px;
+    width: 150px;
+    position: absolute;
+    top: 500px;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+#game-over {
+    display: none;
+    width: 630px;
+    height: 630px;
+    background-color: rgb(0, 98, 255);
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+#game-over button {
+    color: aliceblue;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: hsl(10, 75%, 50%);
+    height: 50px;
+    width: 150px;
+    position: absolute;
+    top: 500px;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+#scenary {
+    background-image: url(/images/map.png);
+    background-position: center;
+    background-size: 620px 620px;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
 }
 td {
     width: 30px;
     height:30px;
-    background-color: aquamarine;
 }
+
 .boundary {
-    background-color: brown;
-}
-.player {
-    background-color: blue;
-}
-.rock {
-    background-color: rgb(221, 96, 96);
-}
-.obstacle {
-    background-color: rgb(207, 132, 34);
+    background-color: hsl(360, 92%, 20%);
+    background-image: url(/images/BoundaryB.png);
+    background-size: auto 30px ;
+    background-repeat: no-repeat;
 }
 .bomb {
-    background-color: rgb(0, 247, 255);
+    background-image: url(/images/bombagif.gif);
+    background-size: auto 30px;
+    background-repeat: no-repeat;
 }
+.player {
+    background-image: url(/images/bombermanUp.png);
+    background-size: auto 30px;
+    background-repeat: no-repeat;
+}
+/*
+.playerW{
+    background-image: url(/images/Bomberman1.png);
+    background-size: auto 30px;
+    background-repeat: no-repeat;
+}
+.playerA{
+    background-image: url(/images/bombermanUp.png);
+    background-size: auto 30px;
+    background-repeat: no-repeat;
+}
+.playerS{
+    background-image: url(/images/bombermanDown.png);
+    background-size: auto 30px;
+    background-repeat: no-repeat;
+}
+.playerD{
+    background-image: url(/images/Bomberman1.png);
+    background-size: auto 30px;
+    background-repeat: no-repeat;
+}*/
+.rock { 
+    background-image: url(/images/SolidBlock.png);
+    background-size: 30px 30px;
+}
+.goal {
 
+    background-color: hsl(295, 76%, 63%);
+}
+.obstacle {
+    background-image: url(/images/SoftBlock.png);
+    background-size: 30px 30px;
+}
 .enemy {
-    background-color: green
+    background-image: url(/images/enemy2.png);
+    background-size: auto 30px;
+    background-repeat: no-repeat;
     }
 
+
+.header {
+    display: flex;
+   justify-content: center;
+   background-color: aqua;
+   
+}
+#counterLife{
+    background-color: hsl(302, 19%, 58%);
+    padding: 10px;
+    width: 60px;
+    margin-right: 10px;
+}
+
+
+#timer{
+    background-color: hsl(50, 100%, 50%);
+    padding: 10px;
+    width: 60px;
+}
