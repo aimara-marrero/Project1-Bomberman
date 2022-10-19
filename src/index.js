@@ -135,54 +135,30 @@ var game = {
   enemy.showEnemy()
   goal.showGoal()
   },
-
-  
-
+  checkBoundaries(cell) {
+    const boundaries = ['rock','boundary', 'obstacle','bomb','enemy','player']
+    return (boundaries.includes(cell.getAttribute("class")))
+  }, 
   collisionCheck(direction) {
-
-
+    let x, y
     switch(direction) {
-  
       case 'w':
-        //Podemos usar operadores ternarios
-        let cellW = document.querySelector(`#row${player.y - 1} #col${player.x}`);
-        if (cellW.getAttribute("class") === "rock" ||
-            cellW.getAttribute("class") === "boundary" ||
-            cellW.getAttribute("class") === "obstacle" ||
-            cellW.getAttribute("class") === "bomb" ||
-            cellW.getAttribute("class") === "enemy") {
-          return true;
-        } return false;
-      
+        //Podemos usar operadores ternarios?
+        y = player.y - 1;
+        x = player.x;
+        return this.checkBoundaries(document.querySelector(`#row${y} #col${x}`));
       case 'a':
-        let cellA = document.querySelector(`#row${player.y} #col${player.x - 1}`);
-        if (cellA.getAttribute("class") === "rock" ||
-            cellA.getAttribute("class") === "boundary" ||
-            cellA.getAttribute("class") === "obstacle" ||
-            cellA.getAttribute("class") === "bomb" ||
-            cellA.getAttribute("class") === "enemy") {
-        return true;
-      } return false;
-      
+        y = player.y;
+        x = player.x - 1;
+        return this.checkBoundaries(document.querySelector(`#row${y} #col${x}`));
       case 's':
-          let cellS = document.querySelector(`#row${player.y + 1} #col${player.x}`);
-        if (cellS.getAttribute("class") === "rock" ||
-            cellS.getAttribute("class") === "boundary" ||
-            cellS.getAttribute("class") === "obstacle" ||
-            cellS.getAttribute("class") === "bomb" ||
-            cellS.getAttribute("class") === "enemy") {
-        return true;
-      } return false;
-  
+        y = player.y + 1;
+        x = player.x;
+        return this.checkBoundaries(document.querySelector(`#row${y} #col${x}`));
       case 'd':
-        let cellD = document.querySelector(`#row${player.y} #col${player.x + 1}`);
-        if (cellD.getAttribute("class") === "rock" ||
-            cellD.getAttribute("class") === "boundary" ||
-            cellD.getAttribute("class") === "obstacle" ||
-            cellD.getAttribute("class") === "bomb" ||
-            cellD.getAttribute("class") === "enemy") {
-        return true;
-      } return false;      
+        y = player.y;
+        x = player.x+1;
+        return this.checkBoundaries(document.querySelector(`#row${y} #col${x}`));
     }
   },
   movePlayer() {
