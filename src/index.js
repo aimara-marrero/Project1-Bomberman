@@ -24,7 +24,6 @@ function Bomb (player){
   this.removeBomb = function(){
     setTimeout(function() {
       var bombCell = document.querySelector(`#row${self.y} #col${self.x}`)
-      console.log(bombCell);
       bombCell.classList.remove("bomb");
       player.activatedBomb = false;
     }, this.timer)
@@ -43,7 +42,6 @@ function Bomb (player){
       explodeCells.forEach((e) => {
         let explodeCell =  document.querySelector(`#row${e.y} #col${e.x}`)
           if(explodeCell.classList.contains('obstacle')) {
-            console.log('ENTRA')
             explodeCell.classList.remove('obstacle');
           } else if (explodeCell.classList.contains('player')) {
             player.health--
@@ -58,22 +56,24 @@ function Bomb (player){
   }
 }
 
-var player = {
 
-  x: 2,
-  y: 17,
-  direction: '',
-  health: 3,
-  activatedBomb: false,
-  showPlayer() {
+function Player () {
+  this.x = 2
+  this.y = 17
+  this.direction = ''
+  this.health = 1
+  this.activatedBomb = false
+  this.showPlayer = function() {
     var playerCell = document.querySelector(`#row${this.y} #col${this.x}`);
     playerCell.classList.add("player");
   },
-  removePlayer() {
+  this.removePlayer = function() {
     var playerCell = document.querySelector(`#row${this.y} #col${this.x}`);
     playerCell.classList.remove("player");
   }
 }
+
+let player = new Player;
 
 
 var enemy = {
@@ -257,9 +257,15 @@ var game = {
   },
   gameOver() {
     if(player.health === 0) {
+      player = new Player;
+      let table = document.querySelector('#board')
+      let rows = document.querySelectorAll('tr')
+      rows.forEach((e) => {
+        table.deleteRow(0)
+      })
+      this.createBoard()
       document.querySelector('#game-over').style.display = 'block';
-      player.removePlayer();
-      player.health = 3 
+      this.tryAgain()
     }
   },
   tryAgain() {
@@ -267,7 +273,7 @@ var game = {
       console.log(tryAgainButton)
       tryAgainButton.onclick = function() {
       document.querySelector('#game-over').style.display = 'none';
-    }
+      }
   },
   win() {
     if(player.x === goal.x && player.y === goal.y) {
@@ -291,7 +297,6 @@ var game = {
     startButton.onclick = function() {
       document.querySelector('#start').style.display = 'none';
     }
-    console.log(startButton);
   }
 }
 
