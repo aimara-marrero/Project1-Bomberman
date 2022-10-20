@@ -231,9 +231,11 @@ var game = {
       intro.pause()
       sound.play()
       document.querySelector("#start").style.display = "none";
-    };
-  },
-};
+    }
+  }
+}
+
+
 
 //intro.play();
 game.createBoard();

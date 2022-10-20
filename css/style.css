@@ -4,7 +4,7 @@ body {
     position: relative;
 }
 #start {
-    display: block;
+    display: none;
     width: 630px;
     height: 660px;
     background-image: url(../assets/images/StartScreen.png);
@@ -142,7 +142,6 @@ td {
     background-size: auto 30px;
     background-repeat: no-repeat;
     }
-
 
 .header {
     display: flex;
