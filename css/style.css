@@ -1,14 +1,14 @@
 
 
 body {
-    margin-top: 50px;
+    
     background-color: rgb(0, 0, 0);
     position: relative;
 }
 #start {
     display: block;
     width: 630px;
-    height: 630px;
+    height: 660px;
     background-image: url(/images/StartScreen.png);
     background-size: cover;
     position: absolute;
@@ -17,38 +17,69 @@ body {
     margin: auto;
 }
 #start button {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    background: hsl(10, 75%, 50%);
-    height: 50px;
+    background-image: url(/images/start-button.png);
+    background-color: rgb(255, 0, 0);
+    background-size: cover;
+    height: 55px;
     width: 150px;
+    border: none;
     position: absolute;
-    top: 500px;
-    left: 0;
+    top: 350px;
+    left: 30px;
     right: 0;
     margin: auto;
 }
 #game-over {
     display: none;
     width: 630px;
-    height: 630px;
-    background-color: rgb(0, 98, 255);
+    height: 660px;
+    background-image: url(/images/gameOver2.png);
+    background-size: cover;
     position: absolute;
     left: 0;
     right: 0;
     margin: auto;
 }
 #game-over button {
-    color: aliceblue;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    background-color: hsl(10, 75%, 50%);
-    height: 50px;
+    background-image: url(/images/try-again-button.png);
+    background-color: rgb(0, 0, 0);
+    background-size: 150px;
+    background-repeat: no-repeat;
+    height: 55px;
     width: 150px;
+    border: none;
     position: absolute;
-    top: 500px;
+    top: 350px;
+    left: 30px;
+    right: 0;
+    margin: auto;
+}
+#win {
+    display: block;
+    width: 630px;
+    height: 660px;
+    background-image: url(/images/winScreen-01.png);
+    background-size: cover;
+    position: absolute;
     left: 0;
     right: 0;
     margin: auto;
 }
+#win button {
+    background-image: url(/images/restart-button.png);
+    background-color: rgb(0, 0, 0);
+    background-size: cover;
+    height: 55px;
+    width: 150px;
+    border: none;
+    position: absolute;
+    top: 350px;
+    left: 30px;
+    right: 0;
+    margin: auto;
+}
+
+
 #scenary {
     background-image: url(/images/map.png);
     background-position: center;
@@ -63,10 +94,16 @@ td {
 }
 
 .boundary {
-    background-color: hsl(360, 92%, 20%);
-    background-image: url(/images/BoundaryB.png);
+    background-image: url(/images/Boundary.png);
     background-size: auto 30px ;
     background-repeat: no-repeat;
+}
+
+.corner{
+    background-image: url(/images/corner.png);
+    background-size: auto 30px ;
+    background-repeat: no-repeat;
+    
 }
 .bomb {
     background-image: url(/images/bombagif.gif);
@@ -74,42 +111,25 @@ td {
     background-repeat: no-repeat;
 }
 .player {
-    background-image: url(/images/bombermanUp.png);
+    background-image: url(/images/bomberman.png);
     background-size: auto 30px;
     background-repeat: no-repeat;
 }
-/*
-.playerW{
-    background-image: url(/images/Bomberman1.png);
-    background-size: auto 30px;
-    background-repeat: no-repeat;
-}
-.playerA{
-    background-image: url(/images/bombermanUp.png);
-    background-size: auto 30px;
-    background-repeat: no-repeat;
-}
-.playerS{
-    background-image: url(/images/bombermanDown.png);
-    background-size: auto 30px;
-    background-repeat: no-repeat;
-}
-.playerD{
-    background-image: url(/images/Bomberman1.png);
-    background-size: auto 30px;
-    background-repeat: no-repeat;
-}*/
+
 .rock { 
     background-image: url(/images/SolidBlock.png);
     background-size: 30px 30px;
 }
 .goal {
 
-    background-color: hsl(295, 76%, 63%);
+    background-image: url(/images/exitDoor.png);
+    background-size: 30px 30px ;
+    background-repeat: no-repeat;
 }
 .obstacle {
     background-image: url(/images/SoftBlock.png);
     background-size: 30px 30px;
+    
 }
 .enemy {
     background-image: url(/images/enemy2.png);
@@ -119,16 +139,24 @@ td {
 
 
 .header {
+    height: 30px;
     display: flex;
-   justify-content: center;
-   background-color: aqua;
-   
+    justify-content: center;
+    background-color: rgb(0, 0, 0);
+
 }
-#counterLife{
-    background-color: hsl(302, 19%, 58%);
-    padding: 10px;
-    width: 60px;
-    margin-right: 10px;
+#hearts{
+    display: flex;
+    width: 90px;
+    margin-right: 50px;
+  
+}
+#heart1, #heart2, #heart3{
+    background-image:url(/images/lifeshearts.png);
+    background-size: cover;
+    height: 30px;
+    width: 50px;
+    margin: auto auto;
 }
 
 

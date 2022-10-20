@@ -1,5 +1,5 @@
 var goal = {
-  x: 4,
+  x: 3,
   y: 17,
   showGoal() {
     var goalCell = document.querySelector(`#row${goal.y} #col${goal.x}`);
@@ -24,7 +24,6 @@ function Bomb (player){
   this.removeBomb = function(){
     setTimeout(function() {
       var bombCell = document.querySelector(`#row${self.y} #col${self.x}`)
-      console.log(bombCell);
       bombCell.classList.remove("bomb");
       player.activatedBomb = false;
     }, this.timer)
@@ -43,7 +42,6 @@ function Bomb (player){
       explodeCells.forEach((e) => {
         let explodeCell =  document.querySelector(`#row${e.y} #col${e.x}`)
           if(explodeCell.classList.contains('obstacle')) {
-            console.log('ENTRA')
             explodeCell.classList.remove('obstacle');
           } else if (explodeCell.classList.contains('player')) {
             player.health--
@@ -58,40 +56,41 @@ function Bomb (player){
   }
 }
 
-var player = {
 
-  x: 2,
-  y: 17,
-  direction: '',
-  health: 3,
-  activatedBomb: false,
-  showPlayer() {
+function Player () {
+  this.x = 2
+  this.y = 17
+  this.direction = ''
+  this.health = 1
+  this.activatedBomb = false
+  this.showPlayer = function() {
     var playerCell = document.querySelector(`#row${this.y} #col${this.x}`);
     playerCell.classList.add("player");
   },
-  removePlayer() {
+  this.removePlayer = function() {
     var playerCell = document.querySelector(`#row${this.y} #col${this.x}`);
     playerCell.classList.remove("player");
   }
 }
 
+let player = new Player;
 
-var enemy = {
-  timerId: 0,
-  x: 5,
-  y: 15,
-  self: this,
-  speed: 500,
-  direction: 1,
-  showEnemy() {
+function Enemy(x, y) {
+  this.timerId = 0
+  this.x = x
+  this.y = y
+  this.self = this
+  this.speed = 500
+  this.direction = 1
+  this.showEnemy = function() {
     var enemyCell = document.querySelector(`#row${this.y} #col${this.x}`);
     enemyCell.classList.add("enemy");
-  },
-  removeEnemy() {
+  }
+  this.removeEnemy = function() {
     var enemyCell = document.querySelector(`#row${this.y} #col${this.x}`);
     enemyCell.classList.remove("enemy");
-  },
-  attack() {
+  }
+  this.attack = function() {
     if (player.x === this.x && player.y === this.y) {
       player.health--
       game.gameOver()
@@ -108,6 +107,9 @@ var enemy = {
   }
 }
 
+let enemy = new Enemy(5,6)
+
+
 var game = {
   createBoard() {
     // Selecciona la tabla vacía del html y la construye en el js a semejanza del mapa dibujado (boundMap)
@@ -120,6 +122,9 @@ var game = {
         td.setAttribute("id", "col" + j);
         if (col === "=") {
           td.classList.add("boundary");
+        }
+        if (col === "+") {
+          td.classList.add("corner");
         }
         if (col === "-") {
           td.classList.add("rock");
@@ -135,54 +140,30 @@ var game = {
   enemy.showEnemy()
   goal.showGoal()
   },
-
-  
-
+  checkBoundaries(cell) {
+    const boundaries = ['rock','boundary', 'obstacle','bomb','enemy','player']
+    return (boundaries.includes(cell.getAttribute("class")))
+  }, 
   collisionCheck(direction) {
-
-
+    let x, y
     switch(direction) {
-  
       case 'w':
-        //Podemos usar operadores ternarios
-        let cellW = document.querySelector(`#row${player.y - 1} #col${player.x}`);
-        if (cellW.getAttribute("class") === "rock" ||
-            cellW.getAttribute("class") === "boundary" ||
-            cellW.getAttribute("class") === "obstacle" ||
-            cellW.getAttribute("class") === "bomb" ||
-            cellW.getAttribute("class") === "enemy") {
-          return true;
-        } return false;
-      
+        //Podemos usar operadores ternarios?
+        y = player.y - 1;
+        x = player.x;
+        return this.checkBoundaries(document.querySelector(`#row${y} #col${x}`));
       case 'a':
-        let cellA = document.querySelector(`#row${player.y} #col${player.x - 1}`);
-        if (cellA.getAttribute("class") === "rock" ||
-            cellA.getAttribute("class") === "boundary" ||
-            cellA.getAttribute("class") === "obstacle" ||
-            cellA.getAttribute("class") === "bomb" ||
-            cellA.getAttribute("class") === "enemy") {
-        return true;
-      } return false;
-      
+        y = player.y;
+        x = player.x - 1;
+        return this.checkBoundaries(document.querySelector(`#row${y} #col${x}`));
       case 's':
-          let cellS = document.querySelector(`#row${player.y + 1} #col${player.x}`);
-        if (cellS.getAttribute("class") === "rock" ||
-            cellS.getAttribute("class") === "boundary" ||
-            cellS.getAttribute("class") === "obstacle" ||
-            cellS.getAttribute("class") === "bomb" ||
-            cellS.getAttribute("class") === "enemy") {
-        return true;
-      } return false;
-  
+        y = player.y + 1;
+        x = player.x;
+        return this.checkBoundaries(document.querySelector(`#row${y} #col${x}`));
       case 'd':
-        let cellD = document.querySelector(`#row${player.y} #col${player.x + 1}`);
-        if (cellD.getAttribute("class") === "rock" ||
-            cellD.getAttribute("class") === "boundary" ||
-            cellD.getAttribute("class") === "obstacle" ||
-            cellD.getAttribute("class") === "bomb" ||
-            cellD.getAttribute("class") === "enemy") {
-        return true;
-      } return false;      
+        y = player.y;
+        x = player.x+1;
+        return this.checkBoundaries(document.querySelector(`#row${y} #col${x}`));
     }
   },
   movePlayer() {
@@ -245,7 +226,7 @@ var game = {
     var timerId = setInterval(function() {
       var nextCell = document.querySelector(`#row${enemy.y + enemy.direction} #col${enemy.x}`)
       let attr = nextCell.getAttribute('class');
-      if(enemy.y === 1 || enemy.y === 18 || attr === 'rock' || attr === 'obstacle' || attr === 'bomb') {
+      if(enemy.y === 1 || enemy.y === 19 || attr === 'rock' || attr === 'obstacle' || attr === 'bomb') {
         enemy.direction *= -1;
       }
       enemy.removeEnemy()
@@ -257,9 +238,15 @@ var game = {
   },
   gameOver() {
     if(player.health === 0) {
+      this.tryAgain()
+      player = new Player;
+      let table = document.querySelector('#board')
+      let rows = document.querySelectorAll('tr')
+      rows.forEach((e) => {
+        table.deleteRow(0)
+      })
+      this.createBoard()
       document.querySelector('#game-over').style.display = 'block';
-      player.removePlayer();
-      player.health = 3 
     }
   },
   tryAgain() {
@@ -267,11 +254,26 @@ var game = {
       console.log(tryAgainButton)
       tryAgainButton.onclick = function() {
       document.querySelector('#game-over').style.display = 'none';
-    }
+      }
   },
   win() {
     if(player.x === goal.x && player.y === goal.y) {
-      alert('YOU WIN!!');
+      this.playAgain()
+      player = new Player;
+      let table = document.querySelector('#board')
+      let rows = document.querySelectorAll('tr')
+      rows.forEach((e) => {
+        table.deleteRow(0)
+      })
+      this.createBoard()
+      document.querySelector('#win').style.display = 'block';
+    }
+  },
+  playAgain() {
+    let playAgainButton = document.querySelector('#win button');
+    console.log(playAgainButton)
+    playAgainButton.onclick = function() {
+    document.querySelector('#win').style.display = 'none';
     }
   },
   generateBomb() {
@@ -291,7 +293,6 @@ var game = {
     startButton.onclick = function() {
       document.querySelector('#start').style.display = 'none';
     }
-    console.log(startButton);
   }
 }
 
